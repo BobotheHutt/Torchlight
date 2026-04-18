@@ -1,16 +1,11 @@
 [
   {
     "hero": "Gemma",
-    "specialization": "Frostfire",
     "title": "Ice Bond Blizzard",
-    "description": "Top-tier T8 mapper with high survivability.",
-    "code": "PASTE_CODE_1_HERE"
-  },
-  {
-    "hero": "Thea",
-    "specialization": "Wisdom of the Gods",
-    "title": "Divine Aegis Support",
-    "description": "Perfect for party play and bossing.",
-    "code": "PASTE_CODE_2_HERE"
+    "code": "XYZ123",
+    "talents": "Goddess of Knowledge / Magister / Arcanist",
+    "skills": "Blizzard (Main) + Frost Shield + Frigid Domain",
+    "gear_goals": "Focus on +Level to Cold Spells and Elemental DMG.",
+    "tags": "Mapping, Beginner"
   }
 ]
