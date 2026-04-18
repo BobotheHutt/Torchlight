@@ -9,12 +9,12 @@
 <body>
     <header>
         <h1>Torchlight Infinite Build Vault</h1>
-        <p>Plan your character here, then sync to GitHub.</p>
     </header>
 
     <main>
         <div id="admin-panel">
             <h3>Build Planner</h3>
+            <!-- This is where you paste your GitHub Token -->
             <input type="password" id="gh-token" placeholder="GitHub Fine-Grained Token">
             
             <div class="form-grid">
@@ -30,8 +30,8 @@
                     <option value="">Primary Talent Tree</option>
                 </select>
 
-                <input type="text" id="title" placeholder="Build Name (e.g. Frost Boss Killer)" onkeyup="updatePreview()">
-                <input type="text" id="b-code" placeholder="Build Code (Optional - get from game later)">
+                <input type="text" id="title" placeholder="Build Name" onkeyup="updatePreview()">
+                <input type="text" id="b-code" placeholder="Build Code (Optional)">
             </div>
 
             <div id="plan-preview">
@@ -44,10 +44,11 @@
         <hr>
 
         <div id="build-container">
-            <!-- Builds will be loaded here -->
+            <!-- Builds load here -->
         </div>
     </main>
 
+    <!-- ONLY ONE SCRIPT CALL HERE -->
     <script src="assets/app.js"></script>
 </body>
 </html>
