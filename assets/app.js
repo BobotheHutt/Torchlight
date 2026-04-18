@@ -1,9 +1,8 @@
-// 1. CONFIGURATION - CHANGE THESE THREE LINES
+// CONFIGURATION
 const REPO_OWNER = "BobotheHutt"; 
-const REPO_NAME = "torchlight-builds";
+const REPO_NAME = "Torchlight";
 const FILE_PATH = "data/builds.json";
 
-// 2. OFFICIAL GAME DATA (Updated for Season 5+)
 const GAME_DATA = {
     heroes: [
         { name: "Gemma", traits: ["Flame of Pleasure", "Frostbitten Heart", "Ice-Fire Fusion"] },
@@ -19,26 +18,21 @@ const GAME_DATA = {
         { name: "Selena", traits: ["Sing with the Tide"] },
         { name: "Sage", traits: ["Licorice Note"] }
     ],
-    talentTrees: [
-        "God of Might", "Goddess of Hunting", "Goddess of Knowledge", 
-        "God of War", "Goddess of Deception", "God of Machines",
-        "The Brave", "Marksman", "Magister", "Warlock", "Psychic", "Steel Vanguard"
-    ]
+    talentTrees: ["God of Might", "Goddess of Hunting", "Goddess of Knowledge", "God of War", "Goddess of Deception", "God of Machines", "The Brave", "Marksman", "Magister", "Warlock", "Psychic", "Steel Vanguard"]
 };
 
-// 3. INITIALIZATION
+// INITIALIZE DROPDOWNS
 function init() {
     const heroSelect = document.getElementById('hero-select');
     const talent1 = document.getElementById('talent-1');
     
-    // Fill Hero and Talent dropdowns
     GAME_DATA.heroes.forEach(h => heroSelect.innerHTML += `<option value="${h.name}">${h.name}</option>`);
     GAME_DATA.talentTrees.forEach(t => talent1.innerHTML += `<option value="${t}">${t}</option>`);
     
-    loadBuilds(); // Fetch existing builds to display
+    loadBuilds();
 }
 
-// 4. HERO-TRAIT DYNAMICS
+// UPDATE TRAITS BASED ON HERO
 function updateTraits() {
     const heroName = document.getElementById('hero-select').value;
     const traitSelect = document.getElementById('trait-select');
@@ -50,31 +44,43 @@ function updateTraits() {
     }
 }
 
-// 5. GITHUB API - SAVE DATA
+// LIVE PREVIEW LOGIC
+function updatePreview() {
+    const hero = document.getElementById('hero-select').value;
+    const trait = document.getElementById('trait-select').value;
+    const talent = document.getElementById('talent-1').value;
+    const title = document.getElementById('title').value || "New Build";
+
+    document.getElementById('preview-text').innerText = `${hero || 'Hero'} (${trait || 'Trait'}) | Tree: ${talent || 'Tree'} | Name: ${title}`;
+}
+
+// SAVE TO GITHUB
 async function submitBuild() {
     const token = document.getElementById('gh-token').value;
+    const btn = document.getElementById('submit-btn');
+    
     const newBuild = {
         hero: document.getElementById('hero-select').value,
         trait: document.getElementById('trait-select').value,
         talent: document.getElementById('talent-1').value,
-        title: document.getElementById('title').value,
-        code: document.getElementById('b-code').value,
+        title: document.getElementById('title').value || "Untitled Build",
+        code: document.getElementById('b-code').value || "NO_CODE_YET",
         date: new Date().toLocaleDateString()
     };
 
-    if (!token || !newBuild.code) return alert("Please enter your GitHub Token and a Build Code.");
+    if (!token) return alert("Enter your GitHub Token!");
+    btn.innerText = "Publishing...";
+    btn.disabled = true;
 
     const url = `https://github.com{REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
     
     try {
         const getRes = await fetch(url);
         const fileData = await getRes.json();
-        // Decode existing builds from GitHub
         const currentBuilds = JSON.parse(atob(fileData.content));
         
         currentBuilds.push(newBuild);
         
-        // Push updated list back to GitHub
         const putRes = await fetch(url, {
             method: "PUT",
             headers: { "Authorization": `token ${token}`, "Content-Type": "application/json" },
@@ -85,34 +91,34 @@ async function submitBuild() {
             })
         });
 
-        if (putRes.ok) { 
-            alert("Success! Build saved to GitHub."); 
-            location.reload(); 
-        }
+        if (putRes.ok) { alert("Build Published!"); location.reload(); }
     } catch (err) { 
-        alert("Error connecting to GitHub. Check your token and repo name."); 
+        alert("Check your Token/Repo name."); 
+        btn.innerText = "Save Build to Site";
+        btn.disabled = false;
     }
 }
 
-// 6. DISPLAY LOGIC
+// LOAD BUILDS FROM JSON
 async function loadBuilds() {
-    const res = await fetch(`./${FILE_PATH}`);
-    const builds = await res.json();
-    const container = document.getElementById('build-container');
-    
-    container.innerHTML = builds.map(b => `
-        <div class="build-card">
-            <div class="card-header">
-                <h2>${b.hero}: ${b.title}</h2>
-                <small>${b.date || ''}</small>
+    try {
+        const res = await fetch(`./${FILE_PATH}`);
+        const builds = await res.json();
+        const container = document.getElementById('build-container');
+        
+        container.innerHTML = builds.map(b => `
+            <div class="build-card">
+                <h2>${b.title}</h2>
+                <p><strong>Hero:</strong> ${b.hero}</p>
+                <p><strong>Trait:</strong> ${b.trait}</p>
+                <p><strong>Talent:</strong> ${b.talent}</p>
+                <div class="code-box">
+                    <code>${b.code}</code>
+                    <button class="copy-btn" onclick="navigator.clipboard.writeText('${b.code}')">Copy</button>
+                </div>
             </div>
-            <p><strong>Trait:</strong> ${b.trait} | <strong>Talent:</strong> ${b.talent}</p>
-            <div class="code-box">
-                <code>${b.code}</code>
-                <button onclick="navigator.clipboard.writeText('${b.code}')">Copy</button>
-            </div>
-        </div>
-    `).reverse().join(''); // Show newest first
+        `).reverse().join('');
+    } catch (e) { console.log("No builds found or builds.json missing."); }
 }
 
 window.onload = init;
