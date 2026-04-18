@@ -11,16 +11,29 @@
     </header>
 
     <!-- Admin Form (Add fields for Skills/Talents here) -->
-    <div id="admin-panel" class="hidden">
+    <div id="admin-panel">
+        <h3>Add New Build</h3>
         <input type="password" id="gh-token" placeholder="GitHub Token">
-        <input type="text" id="hero" placeholder="Hero">
-        <input type="text" id="title" placeholder="Build Title">
-        <input type="text" id="talents" placeholder="Talent Trees">
-        <textarea id="skills" placeholder="Main Skills & Links"></textarea>
-        <textarea id="gear" placeholder="Key Gear/Stats"></textarea>
-        <input type="text" id="b-code" placeholder="Build Code">
-        <button onclick="submitBuild()">Publish Build</button>
+    
+        <!-- Dropdowns instead of typing -->
+        <select id="hero-select" onchange="updateTraits()">
+            <option value="">Select Hero</option>
+        </select>
+    
+        <select id="trait-select">
+            <option value="">Select Trait</option>
+        </select>
+
+        <select id="talent-1">
+            <option value="">First Talent Tree</option>
+        </select>
+
+        <input type="text" id="title" placeholder="Build Title (e.g. Speed Farmer)">
+        <input type="text" id="b-code" placeholder="Paste Build Code Here">
+    
+        <button onclick="submitBuild()">Post to Site</button>
     </div>
+
 
     <div id="build-container">
         <!-- Builds will be injected here by app.js -->
