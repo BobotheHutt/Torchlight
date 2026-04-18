@@ -1,23 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <link rel="stylesheet" href="assets/style.css">
-    <title>TL:I Build Vault</title>
+    <title>TLI Build Vault</title>
 </head>
-    <body>
+<body>
+    <header>
         <h1>Torchlight Infinite Build Vault</h1>
+        <input type="text" id="searchInput" placeholder="Search Hero or Skill (e.g. Gemma or Blizzard)..." onkeyup="filterBuilds()">
+    </header>
 
-        <div id="admin-panel" style="background: #222; padding: 20px; border: 1px solid #03dac6; margin: 20px;">
-        <h3>Add New Build</h3>
-        <input type="password" id="gh-token" placeholder="Enter GitHub Token">
-        <input type="text" id="hero" placeholder="Hero Name">
+    <!-- Admin Form (Add fields for Skills/Talents here) -->
+    <div id="admin-panel" class="hidden">
+        <input type="password" id="gh-token" placeholder="GitHub Token">
+        <input type="text" id="hero" placeholder="Hero">
         <input type="text" id="title" placeholder="Build Title">
-        <textarea id="desc" placeholder="Description"></textarea>
+        <input type="text" id="talents" placeholder="Talent Trees">
+        <textarea id="skills" placeholder="Main Skills & Links"></textarea>
+        <textarea id="gear" placeholder="Key Gear/Stats"></textarea>
         <input type="text" id="b-code" placeholder="Build Code">
-        <button onclick="submitBuild()">Post to Site</button>
+        <button onclick="submitBuild()">Publish Build</button>
     </div>
 
-    <div id="build-container"></div>
+    <div id="build-container">
+        <!-- Builds will be injected here by app.js -->
+    </div>
+
     <script src="assets/app.js"></script>
 </body>
 </html>
