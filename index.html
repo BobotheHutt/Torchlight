@@ -4,8 +4,19 @@
     <link rel="stylesheet" href="assets/style.css">
     <title>TL:I Build Vault</title>
 </head>
-<body>
-    <h1>Torchlight Infinite Build Vault</h1>
+    <body>
+        <h1>Torchlight Infinite Build Vault</h1>
+
+        <div id="admin-panel" style="background: #222; padding: 20px; border: 1px solid #03dac6; margin: 20px;">
+        <h3>Add New Build</h3>
+        <input type="password" id="gh-token" placeholder="Enter GitHub Token">
+        <input type="text" id="hero" placeholder="Hero Name">
+        <input type="text" id="title" placeholder="Build Title">
+        <textarea id="desc" placeholder="Description"></textarea>
+        <input type="text" id="b-code" placeholder="Build Code">
+        <button onclick="submitBuild()">Post to Site</button>
+    </div>
+
     <div id="build-container"></div>
     <script src="assets/app.js"></script>
 </body>
