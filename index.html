@@ -1,43 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TLI Build Vault & Planner</title>
     <link rel="stylesheet" href="assets/style.css">
-    <title>TLI Build Vault</title>
 </head>
 <body>
     <header>
         <h1>Torchlight Infinite Build Vault</h1>
-        <input type="text" id="searchInput" placeholder="Search Hero or Skill (e.g. Gemma or Blizzard)..." onkeyup="filterBuilds()">
+        <p>Plan your character here, then sync to GitHub.</p>
     </header>
 
-    <!-- Admin Form (Add fields for Skills/Talents here) -->
-    <div id="admin-panel">
-        <h3>Add New Build</h3>
-        <input type="password" id="gh-token" placeholder="GitHub Token">
-    
-        <!-- Dropdowns instead of typing -->
-        <select id="hero-select" onchange="updateTraits()">
-            <option value="">Select Hero</option>
-        </select>
-    
-        <select id="trait-select">
-            <option value="">Select Trait</option>
-        </select>
+    <main>
+        <div id="admin-panel">
+            <h3>Build Planner</h3>
+            <input type="password" id="gh-token" placeholder="GitHub Fine-Grained Token">
+            
+            <div class="form-grid">
+                <select id="hero-select" onchange="updateTraits(); updatePreview();">
+                    <option value="">Select Hero</option>
+                </select>
+                
+                <select id="trait-select" onchange="updatePreview()">
+                    <option value="">Select Trait</option>
+                </select>
 
-        <select id="talent-1">
-            <option value="">First Talent Tree</option>
-        </select>
+                <select id="talent-1" onchange="updatePreview()">
+                    <option value="">Primary Talent Tree</option>
+                </select>
 
-        <input type="text" id="title" placeholder="Build Title (e.g. Speed Farmer)">
-        <input type="text" id="b-code" placeholder="Paste Build Code Here">
-    
-        <button onclick="submitBuild()">Post to Site</button>
-    </div>
+                <input type="text" id="title" placeholder="Build Name (e.g. Frost Boss Killer)" onkeyup="updatePreview()">
+                <input type="text" id="b-code" placeholder="Build Code (Optional - get from game later)">
+            </div>
 
+            <div id="plan-preview">
+                <strong>Current Plan:</strong> <span id="preview-text">Start picking options...</span>
+            </div>
 
-    <div id="build-container">
-        <!-- Builds will be injected here by app.js -->
-    </div>
+            <button id="submit-btn" onclick="submitBuild()">Save Build to Site</button>
+        </div>
+
+        <hr>
+
+        <div id="build-container">
+            <!-- Builds will be loaded here -->
+        </div>
+    </main>
 
     <script src="assets/app.js"></script>
 </body>
