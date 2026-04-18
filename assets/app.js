@@ -1,5 +1,5 @@
 // 1. CONFIGURATION - CHANGE THESE THREE LINES
-const REPO_OWNER = "YOUR_GITHUB_USERNAME"; 
+const REPO_OWNER = "BobotheHutt"; 
 const REPO_NAME = "torchlight-builds";
 const FILE_PATH = "data/builds.json";
 
