@@ -1,40 +1,44 @@
-const repoOwner = "YOUR_GITHUB_USERNAME";
-const repoName = "torchlight-builds";
-const filePath = "data/builds.json";
+async function loadBuilds() {
+    const response = await fetch('./data/builds.json');
+    const builds = await response.json();
+    const container = document.getElementById('build-container');
+    container.innerHTML = ''; // Clear for refresh
 
-// --- SAVE BUILD FUNCTION ---
-async function submitBuild() {
-    const token = document.getElementById('gh-token').value;
-    const newBuild = {
-        hero: document.getElementById('hero').value,
-        title: document.getElementById('title').value,
-        description: document.getElementById('desc').value,
-        code: document.getElementById('b-code').value
-    };
+    builds.forEach(build => {
+        const card = `
+            <div class="build-card" data-hero="${build.hero.toLowerCase()}">
+                <div class="card-header">
+                    <h2>${build.hero} - ${build.title}</h2>
+                    <span class="tag">${build.tags || 'General'}</span>
+                </div>
+                
+                <div class="build-section">
+                    <strong>📍 Talents:</strong> <span>${build.talents}</span>
+                </div>
 
-    // 1. Get the current file (GitHub requires the 'sha' to update)
-    const url = `https://github.com{repoOwner}/${repoName}/contents/${filePath}`;
-    const getRes = await fetch(url);
-    const fileData = await getRes.json();
-    
-    // 2. Decode current content, add new build, and re-encode
-    const currentBuilds = JSON.parse(atob(fileData.content));
-    currentBuilds.push(newBuild);
-    const updatedContent = btoa(JSON.stringify(currentBuilds, null, 2));
+                <div class="build-section">
+                    <strong>🔥 Skills:</strong> <p>${build.skills}</p>
+                </div>
 
-    // 3. Push back to GitHub
-    const putRes = await fetch(url, {
-        method: "PUT",
-        headers: { "Authorization": `token ${token}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-            message: `Added build: ${newBuild.title}`,
-            content: updatedContent,
-            sha: fileData.sha
-        })
+                <div class="build-section">
+                    <strong>🛡️ Gear Priority:</strong> <p>${build.gear_goals}</p>
+                </div>
+
+                <div class="code-copy">
+                    <code>${build.code}</code>
+                    <button onclick="navigator.clipboard.writeText('${build.code}')">Copy Code</button>
+                </div>
+            </div>`;
+        container.innerHTML += card;
     });
-
-    if (putRes.ok) { alert("Build added! Refresh in 1 minute."); location.reload(); }
-    else { alert("Error saving build. Check your token."); }
 }
 
-// --- LOAD BUILD FUNCTION (Keep your existing load logic here) ---
+function filterBuilds() {
+    let input = document.getElementById('searchInput').value.toLowerCase();
+    let cards = document.getElementsByClassName('build-card');
+    for (let card of cards) {
+        card.style.display = card.innerText.toLowerCase().includes(input) ? "block" : "none";
+    }
+}
+
+loadBuilds();
