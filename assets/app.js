@@ -1,44 +1,29 @@
-async function loadBuilds() {
-    const response = await fetch('./data/builds.json');
-    const builds = await response.json();
-    const container = document.getElementById('build-container');
-    container.innerHTML = ''; // Clear for refresh
+// Populate Dropdowns on Load
+function setupForm() {
+    const heroSelect = document.getElementById('hero-select');
+    const talentSelect = document.getElementById('talent-1');
 
-    builds.forEach(build => {
-        const card = `
-            <div class="build-card" data-hero="${build.hero.toLowerCase()}">
-                <div class="card-header">
-                    <h2>${build.hero} - ${build.title}</h2>
-                    <span class="tag">${build.tags || 'General'}</span>
-                </div>
-                
-                <div class="build-section">
-                    <strong>📍 Talents:</strong> <span>${build.talents}</span>
-                </div>
+    GAME_DATA.heroes.forEach(h => {
+        heroSelect.innerHTML += `<option value="${h.name}">${h.name}</option>`;
+    });
 
-                <div class="build-section">
-                    <strong>🔥 Skills:</strong> <p>${build.skills}</p>
-                </div>
-
-                <div class="build-section">
-                    <strong>🛡️ Gear Priority:</strong> <p>${build.gear_goals}</p>
-                </div>
-
-                <div class="code-copy">
-                    <code>${build.code}</code>
-                    <button onclick="navigator.clipboard.writeText('${build.code}')">Copy Code</button>
-                </div>
-            </div>`;
-        container.innerHTML += card;
+    GAME_DATA.talentTrees.forEach(t => {
+        talentSelect.innerHTML += `<option value="${t}">${t}</option>`;
     });
 }
 
-function filterBuilds() {
-    let input = document.getElementById('searchInput').value.toLowerCase();
-    let cards = document.getElementsByClassName('build-card');
-    for (let card of cards) {
-        card.style.display = card.innerText.toLowerCase().includes(input) ? "block" : "none";
+// Update Traits when Hero changes
+function updateTraits() {
+    const heroName = document.getElementById('hero-select').value;
+    const traitSelect = document.getElementById('trait-select');
+    traitSelect.innerHTML = '<option value="">Select Trait</option>';
+    
+    const hero = GAME_DATA.heroes.find(h => h.name === heroName);
+    if (hero) {
+        hero.traits.forEach(trait => {
+            traitSelect.innerHTML += `<option value="${trait}">${trait}</option>`;
+        });
     }
 }
 
-loadBuilds();
+setupForm();
